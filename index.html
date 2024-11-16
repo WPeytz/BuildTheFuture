@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildTheFuture</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Title Screen -->
+    <div id="title-screen">
+        <h1>BuildTheFuture</h1>
+        <button id="start-game">Start Game</button>
+        </div>
+        <img id="toggle-title-music" src="assets/images/mute.png" alt="Toggle Music" aria-label="Toggle Title Music">
+    </div>
+
+    <!-- Game Content Section -->
+    <div id="game-content" style="display: none;">
+        <h2 id="level-title">Level 1: Ancient Egypt</h2>
+        
+        <!-- Progress Bar -->
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <!-- Question Area -->
+        <p id="question">Loading question...</p>
+        
+        <!-- Answer Input and Submit Button -->
+        <input type="text" id="answer-input" placeholder="Enter your answer">
+        <button id="submit-answer" aria-label="Check Answer">Check Answer</button>
+        
+        <!-- Feedback Message -->
+        <p id="feedback" aria-live="polite">Your feedback will appear here...</p>
+
+        <!-- Skip Question Button -->
+        <button id="skip-button" class="hidden">Skip Question</button>
+
+        <!-- Continue Button -->
+        <button id="continue-button" class="hidden">Continue</button>
+
+        <!-- Music Toggle Button -->
+        <img id="toggle-game-music" src="assets/images/unmute.png" alt="Toggle Game Music" aria-label="Toggle Game Music">
+    </div>
+
+    <!-- Fade-to-Black Overlay -->
+    <div id="fade-to-black" class="fade-to-black"></div>
+
+    <!-- JavaScript File -->
+    <script src="script.js"></script>
+</body>
+</html>
