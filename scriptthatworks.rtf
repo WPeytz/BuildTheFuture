@@ -1,0 +1,712 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2818
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red89\green138\blue67;\red24\green24\blue24;\red193\green193\blue193;
+\red70\green137\blue204;\red140\green211\blue254;\red202\green202\blue202;\red167\green197\blue152;\red66\green179\blue255;
+\red194\green126\blue101;\red212\green214\blue154;\red67\green192\blue160;\red183\green111\blue179;}
+{\*\expandedcolortbl;;\cssrgb\c41569\c60000\c33333;\cssrgb\c12157\c12157\c12157;\cssrgb\c80000\c80000\c80000;
+\cssrgb\c33725\c61176\c83922;\cssrgb\c61176\c86275\c99608;\cssrgb\c83137\c83137\c83137;\cssrgb\c70980\c80784\c65882;\cssrgb\c30980\c75686\c100000;
+\cssrgb\c80784\c56863\c47059;\cssrgb\c86275\c86275\c66667;\cssrgb\c30588\c78824\c69020;\cssrgb\c77255\c52549\c75294;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 // Global Variables\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 totalLevels\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 8\cf4 \strokec4 ; \cf2 \strokec2 // Total number of levels\cf4 \cb1 \strokec4 \
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  []; \cf2 \strokec2 // Holds the questions for the current level\cf4 \cb1 \strokec4 \
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 incorrectAttempts\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Tracks incorrect attempts for the current question\cf4 \cb1 \strokec4 \
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 lastMessageIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf7 \strokec7 -\cf8 \strokec8 1\cf4 \strokec4 ; \cf2 \strokec2 // To track the last used message\cf4 \cb1 \strokec4 \
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 lastIncorrectMessageIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf7 \strokec7 -\cf8 \strokec8 1\cf4 \strokec4 ; \cf2 \strokec2 // To track the last used incorrect message\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Music file URLs\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 musicUrls\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/TitleScreen.mp3"\cf4 \strokec4 , \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/Egypt.mp3"\cf4 \strokec4 , \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/Greece.mp3"\cf4 \strokec4 , \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/Rome.mp3"\cf4 \strokec4 , \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/Medieval.mp3"\cf4 \strokec4 , \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/Renaissance.mp3"\cf4 \strokec4 , \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/Industrial.mp3"\cf4 \strokec4 , \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/Space.mp3"\cf4 \strokec4 , \cf2 \strokec2 // <-- Ensure no trailing commas\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "assets/music/AI.mp3"\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 musicTracks\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3 \strokec9 musicUrls\cf4 \strokec4 .\cf11 \strokec11 forEach\cf4 \strokec4 (\cf6 \strokec6 url\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 track\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 new\cf4 \strokec4  \cf12 \strokec12 Audio\cf4 \strokec4 (\cf6 \strokec6 url\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 track\cf4 \strokec4 .\cf6 \strokec6 loop\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 true\cf4 \strokec4 ; \cf2 \strokec2 // Set looping for each track\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 musicTracks\cf4 \strokec4 .\cf11 \strokec11 push\cf4 \strokec4 (\cf9 \strokec9 track\cf4 \strokec4 ); \cf2 \strokec2 // Store each track in an array\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \});\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Track music state\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 isTitleMusicPlaying\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 false\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf5 \cb3 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 isGameMusicPlaying\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 false\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Initial setup on page load\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3 \strokec6 window\cf4 \strokec4 .\cf11 \strokec11 onload\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 function\cf4 \strokec4  () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Set the initial speaker icon\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "toggle-title-music"\cf4 \strokec4 ).\cf6 \strokec6 src\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "assets/images/mute.png"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \};\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Event Listeners\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "toggle-title-music"\cf4 \strokec4 ).\cf11 \strokec11 onclick\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf11 \strokec11 toggleTitleMusic\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf6 \cb3 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "toggle-game-music"\cf4 \strokec4 ).\cf11 \strokec11 onclick\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf11 \strokec11 toggleGameMusic\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf6 \cb3 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "start-game"\cf4 \strokec4 ).\cf11 \strokec11 addEventListener\cf4 \strokec4 (\cf10 \strokec10 "click"\cf4 \strokec4 , \cf5 \strokec5 function\cf4 \strokec4  () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 1\cf4 \strokec4 ; \cf2 \strokec2 // Move to Level 1\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf11 \strokec11 loadLevel\cf4 \strokec4 (\cf6 \strokec6 currentLevel\cf4 \strokec4 ); \cf2 \strokec2 // Call the loadLevel function\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \});\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "submit-answer"\cf4 \strokec4 ).\cf11 \strokec11 onclick\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf11 \strokec11 checkAnswer\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf6 \cb3 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "answer-input"\cf4 \strokec4 ).\cf11 \strokec11 addEventListener\cf4 \strokec4 (\cf10 \strokec10 "keypress"\cf4 \strokec4 , \cf5 \strokec5 function\cf4 \strokec4  (\cf6 \strokec6 event\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 event\cf4 \strokec4 .\cf9 \strokec9 key\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf10 \strokec10 "Enter"\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 event\cf4 \strokec4 .\cf11 \strokec11 preventDefault\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 checkAnswer\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \});\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 addEventListener\cf4 \strokec4 (\cf10 \strokec10 "keydown"\cf4 \strokec4 , \cf5 \strokec5 function\cf4 \strokec4  (\cf6 \strokec6 event\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 event\cf4 \strokec4 .\cf9 \strokec9 key\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf10 \strokec10 "ArrowLeft"\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 goToPreviousLevel\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \});\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Event Listener for Right Arrow\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 addEventListener\cf4 \strokec4 (\cf10 \strokec10 "keydown"\cf4 \strokec4 , \cf5 \strokec5 function\cf4 \strokec4  (\cf6 \strokec6 event\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 event\cf4 \strokec4 .\cf9 \strokec9 key\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf10 \strokec10 "ArrowRight"\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 goToNextLevel\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \});\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 startGame\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 titleScreen\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "title-screen"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 gameContent\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "game-content"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Hide the title screen\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 titleScreen\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "none"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Show the game content\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 gameContent\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Stop the title screen music\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 isTitleMusicPlaying\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 titleMusic\cf4 \strokec4 .\cf11 \strokec11 pause\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 titleMusic\cf4 \strokec4 .\cf6 \strokec6 currentTime\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "toggle-title-music"\cf4 \strokec4 ).\cf6 \strokec6 src\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "assets/images/mute.png"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 isTitleMusicPlaying\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 false\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Start Level 1 music\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf7 \strokec7 !\cf6 \strokec6 isGameMusicPlaying\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 level1Music\cf4 \strokec4 .\cf11 \strokec11 play\cf4 \strokec4 ()\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             .\cf11 \strokec11 then\cf4 \strokec4 (() \cf5 \strokec5 =>\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4                 \cf6 \strokec6 isGameMusicPlaying\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 true\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4                 \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "toggle-game-music"\cf4 \strokec4 ).\cf6 \strokec6 src\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "assets/images/unmute.png"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \})\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             .\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Game music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 ));\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Initialize Level 1\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 1\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf9 \strokec9 level1Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions to Level 1\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Utility Functions\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 resetGame\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 1\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "feedback"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "progress-bar"\cf4 \strokec4 ).\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 width\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "0%"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "answer-input"\cf4 \strokec4 ).\cf6 \strokec6 value\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "submit-answer"\cf4 \strokec4 ).\cf6 \strokec6 disabled\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 false\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "continue-button"\cf4 \strokec4 )?.\cf11 \strokec11 remove\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "title-screen"\cf4 \strokec4 ).\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "flex"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "game-content"\cf4 \strokec4 ).\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "none"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 updateProgressBar\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 progressPercentage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  (\cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 /\cf4 \strokec4  \cf6 \strokec6 questions\cf4 \strokec4 .\cf6 \strokec6 length\cf4 \strokec4 ) \cf7 \strokec7 *\cf4 \strokec4  \cf8 \strokec8 100\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "progress-bar"\cf4 \strokec4 ).\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 width\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 `\cf5 \strokec5 $\{\cf6 \strokec6 progressPercentage\cf5 \strokec5 \}\cf10 \strokec10 %`\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Function to Load Levels\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 loadLevel\cf4 \strokec4 (\cf6 \strokec6 level\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 titleScreen\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "title-screen"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 gameContent\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "game-content"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Hide both sections initially\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 titleScreen\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "none"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "none"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Reset all level music\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 musicTracks\cf4 \strokec4 .\cf11 \strokec11 forEach\cf4 \strokec4 (\cf6 \strokec6 track\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 track\cf4 \strokec4 .\cf11 \strokec11 pause\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 track\cf4 \strokec4 .\cf6 \strokec6 currentTime\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \});\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Handle level transitions\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 0: Title Screen\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 titleScreen\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "flex"\cf4 \strokec4 ; \cf2 \strokec2 // Show the title screen\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ; \cf2 \strokec2 // Remove any previous level classes\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 0\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Title Screen music\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 1\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 1: Ancient Egypt\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-1"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 1 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/egypt.jpg")'\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Ancient Egypt - Level 1"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 1\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 1 music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level1Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 1\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 2\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 2: Ancient Greece\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-2"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 2 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/greece.jpg")'\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Ancient Greece - Level 2"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 2\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 2 music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level2Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 2\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 3\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 3: Ancient Rome\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-3"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 3 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/rome.jpg")'\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Ancient Rome - Level 3"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 3\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 3 music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level3Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 3\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 4\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 4: Medieval Europe\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-4"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 4 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/medieval.jpg")'\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Medieval Europe - Level 4"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 4\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 4 music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level4Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 4\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 5\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 5: Renaissance\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-5"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 5 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/renaissance.jpg")'\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Renaissance - Level 5"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 5\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 5 music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level5Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 5\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 6\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 6: Industrial Revolution\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-6"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 6 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/industrial.jpg")'\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Industrial Revolution - Level 6"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 6\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 6 music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level6Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 6\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 7\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 7: The Space Age\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-7"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 7 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/space.jpg")'\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "The Space Age - Level 7"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 7\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 7 music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level7Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 7\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 8\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Level 8: The AI Era\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 className\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "level-8"\cf4 \strokec4 ; \cf2 \strokec2 // Apply Level 8 class\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 gameContent\cf4 \strokec4 .\cf6 \strokec6 style\cf4 \strokec4 .\cf6 \strokec6 backgroundImage\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 'url("assets/images/ai.jpg")'\cf4 \strokec4 ; \cf2 \strokec2 // Set background image\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 querySelector\cf4 \strokec4 (\cf10 \strokec10 "h2"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "The AI Era - Level 8"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 musicTracks\cf4 \strokec4 [\cf8 \strokec8 8\cf4 \strokec4 ].\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 )); \cf2 \strokec2 // Level 8 music\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 level8Questions\cf4 \strokec4 ; \cf2 \strokec2 // Set the questions for Level 8\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset question index\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load the first question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Invalid level:"\cf4 \strokec4 , \cf6 \strokec6 level\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 loadQuestion\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 questionElement\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "question"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf7 \strokec7 !\cf6 \strokec6 questions\cf4 \strokec4 [\cf6 \strokec6 currentQuestionIndex\cf4 \strokec4 ]) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "No questions available."\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 return\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Load the current question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 questionElement\cf4 \strokec4 .\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 questions\cf4 \strokec4 [\cf6 \strokec6 currentQuestionIndex\cf4 \strokec4 ].\cf6 \strokec6 question\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Reset feedback and input\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "feedback"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "answer-input"\cf4 \strokec4 ).\cf6 \strokec6 value\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Do NOT reset incorrectAttempts here!\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 goToNextLevel\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 <\cf4 \strokec4  \cf6 \strokec6 totalLevels\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentLevel\cf7 \strokec7 ++\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadLevel\cf4 \strokec4 (\cf6 \strokec6 currentLevel\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 alert\cf4 \strokec4 (\cf10 \strokec10 "This is the last level! More levels coming soon."\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 getNextIncorrectMessage\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 let\cf4 \strokec4  \cf6 \strokec6 newIndex\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 do\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 newIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 Math\cf4 \strokec4 .\cf11 \strokec11 floor\cf4 \strokec4 (\cf6 \strokec6 Math\cf4 \strokec4 .\cf11 \strokec11 random\cf4 \strokec4 () \cf7 \strokec7 *\cf4 \strokec4  \cf9 \strokec9 incorrectMessages\cf4 \strokec4 .\cf6 \strokec6 length\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 while\cf4 \strokec4  (\cf6 \strokec6 newIndex\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf6 \strokec6 lastIncorrectMessageIndex\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 lastIncorrectMessageIndex\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 newIndex\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 incorrectMessages\cf4 \strokec4 [\cf6 \strokec6 newIndex\cf4 \strokec4 ];\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Game Logic\cf4 \cb1 \strokec4 \
+\cf2 \cb3 \strokec2 // Array of incorrect messages\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 incorrectMessages\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Not quite! Try again."\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Close, but not correct. Give it another shot!"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Incorrect. You can do it!"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Oops! That\'92s not right. Try again."\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Almost there! Keep going!"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Nope! Think it through and try again."\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "That\'92s not the answer we\'92re looking for. Try again!"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Hmm, not correct. Give it another go!"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Incorrect, but you\'92re getting closer!"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf10 \strokec10 "Don\'92t give up! Try one more time!"\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 checkAnswer\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 userAnswer\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "answer-input"\cf4 \strokec4 ).\cf6 \strokec6 value\cf4 \strokec4 .\cf11 \strokec11 trim\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 correctAnswer\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 questions\cf4 \strokec4 [\cf6 \strokec6 currentQuestionIndex\cf4 \strokec4 ]?.\cf6 \strokec6 answer\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf9 \strokec9 userAnswer\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf9 \strokec9 correctAnswer\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "feedback"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Correct!"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf7 \strokec7 ++\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 incorrectAttempts\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset incorrect attempts on correct answer\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 updateProgressBar\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 <\cf4 \strokec4  \cf6 \strokec6 questions\cf4 \strokec4 .\cf6 \strokec6 length\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf11 \strokec11 loadQuestion\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \} \cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf11 \strokec11 handleLevelCompletion\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Remove the skip button if it exists\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 skipButton\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "skip-button"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 if\cf4 \strokec4  (\cf9 \strokec9 skipButton\cf4 \strokec4 ) \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf11 \strokec11 remove\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 feedbackElement\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "feedback"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 feedbackElement\cf4 \strokec4 .\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf11 \strokec11 getNextIncorrectMessage\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 incorrectAttempts\cf7 \strokec7 ++\cf4 \strokec4 ; \cf2 \strokec2 // Increment incorrect attempts on incorrect answer\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 log\cf4 \strokec4 (\cf10 \strokec10 "Incorrect Attempts:"\cf4 \strokec4 , \cf6 \strokec6 incorrectAttempts\cf4 \strokec4 ); \cf2 \strokec2 // Debugging log\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Show skip button if 5 or more incorrect attempts\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 incorrectAttempts\cf4 \strokec4  \cf7 \strokec7 >=\cf4 \strokec4  \cf8 \strokec8 5\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf11 \strokec11 addSkipButton\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 addSkipButton\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 log\cf4 \strokec4 (\cf10 \strokec10 "addSkipButton function called for question:"\cf4 \strokec4 , \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Check if the skip button already exists\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "skip-button"\cf4 \strokec4 )) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 log\cf4 \strokec4 (\cf10 \strokec10 "Skip button already exists."\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 return\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 log\cf4 \strokec4 (\cf10 \strokec10 "Creating Skip Button..."\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 skipButton\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 createElement\cf4 \strokec4 (\cf10 \strokec10 "button"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf6 \strokec6 id\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "skip-button"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "Skip Question"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Style the button\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 marginTop\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "15px"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 padding\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "10px 20px"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 border\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "none"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 borderRadius\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "5px"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 cursor\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "pointer"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 fontSize\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "1.2em"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 backgroundColor\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "#4CAF50"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 color\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "white"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 gameContent\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "game-content"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf7 \strokec7 !\cf9 \strokec9 gameContent\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Game content not found."\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 return\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 gameContent\cf4 \strokec4 .\cf11 \strokec11 appendChild\cf4 \strokec4 (\cf9 \strokec9 skipButton\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Add click event to skip the question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf11 \strokec11 onclick\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 function\cf4 \strokec4  () \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 log\cf4 \strokec4 (\cf10 \strokec10 "Skip button clicked for question:"\cf4 \strokec4 , \cf6 \strokec6 currentQuestionIndex\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 incorrectAttempts\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Reset incorrect attempts\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentQuestionIndex\cf7 \strokec7 ++\cf4 \strokec4 ; \cf2 \strokec2 // Move to next question\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 currentQuestionIndex\cf4 \strokec4  \cf7 \strokec7 <\cf4 \strokec4  \cf6 \strokec6 questions\cf4 \strokec4 .\cf6 \strokec6 length\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf11 \strokec11 loadQuestion\cf4 \strokec4 (); \cf2 \strokec2 // Load next question\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \} \cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf11 \strokec11 handleLevelCompletion\cf4 \strokec4 (); \cf2 \strokec2 // Handle level completion\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf9 \strokec9 skipButton\cf4 \strokec4 .\cf11 \strokec11 remove\cf4 \strokec4 (); \cf2 \strokec2 // Remove the button after skipping\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \};\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 handleLevelCompletion\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 feedback\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "feedback"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 continueButton\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 createElement\cf4 \strokec4 (\cf10 \strokec10 "button"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Level names for feedback\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 levelNames\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 1\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "Ancient Egypt"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 2\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "Ancient Greece"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 3\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "Ancient Rome"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 4\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "Medieval Europe"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 5\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "Renaissance"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 6\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "Industrial Revolution"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 7\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "The Space Age"\cf4 \strokec4 ,\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf8 \strokec8 8\cf6 \strokec6 :\cf4 \strokec4  \cf10 \strokec10 "The AI Era"\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \};\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Display completion feedback\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 feedback\cf4 \strokec4 .\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 `Congratulations! You've completed Level \cf5 \strokec5 $\{\cf6 \strokec6 currentLevel\cf5 \strokec5 \}\cf10 \strokec10 : \cf5 \strokec5 $\{\cf9 \strokec9 levelNames\cf7 \strokec7 [\cf6 \strokec6 currentLevel\cf7 \strokec7 ] || \cf10 \strokec10 "this level"\cf5 \strokec5 \}\cf10 \strokec10 !`\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 feedback\cf4 \strokec4 .\cf9 \strokec9 classList\cf4 \strokec4 .\cf11 \strokec11 add\cf4 \strokec4 (\cf10 \strokec10 "completed"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // If it's the last level, trigger the fade-to-black effect\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf9 \strokec9 totalLevels\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 setTimeout\cf4 \strokec4 (() \cf5 \strokec5 =>\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf6 \strokec6 fadeElement\cf4 \strokec4 .\cf6 \strokec6 classList\cf4 \strokec4 .\cf11 \strokec11 add\cf4 \strokec4 (\cf10 \strokec10 "visible"\cf4 \strokec4 ); \cf2 \strokec2 // Trigger fade effect\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \}, \cf8 \strokec8 2000\cf4 \strokec4 ); \cf2 \strokec2 // Delay to show feedback for 2 seconds\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Reset the game after fade\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 setTimeout\cf4 \strokec4 (() \cf5 \strokec5 =>\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf11 \strokec11 alert\cf4 \strokec4 (\cf10 \strokec10 "Thank you for playing BuildTheFuture!"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf11 \strokec11 resetGame\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \}, \cf8 \strokec8 5000\cf4 \strokec4 ); \cf2 \strokec2 // Additional 3 seconds after fade starts\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 return\cf4 \strokec4 ; \cf2 \strokec2 // End function here for the last level\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Create and style the "Continue" button\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf6 \strokec6 id\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "continue-button"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 <\cf4 \strokec4  \cf9 \strokec9 totalLevels\cf4 \strokec4  \cf7 \strokec7 ?\cf4 \strokec4  \cf10 \strokec10 "Continue"\cf4 \strokec4  \cf7 \strokec7 :\cf4 \strokec4  \cf10 \strokec10 "Finish"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 display\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "block"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 margin\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "20px auto"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 padding\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "12px 24px"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 fontSize\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "1.2em"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 border\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "none"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 borderRadius\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "8px"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 cursor\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "pointer"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 backgroundColor\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "#4CAF50"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf9 \strokec9 style\cf4 \strokec4 .\cf6 \strokec6 color\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "white"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Append the button to the game content\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 gameContent\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "game-content"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 gameContent\cf4 \strokec4 .\cf11 \strokec11 appendChild\cf4 \strokec4 (\cf9 \strokec9 continueButton\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Add click event to transition to the next level\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf11 \strokec11 onclick\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 function\cf4 \strokec4  () \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentLevel\cf7 \strokec7 ++\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadLevel\cf4 \strokec4 (\cf6 \strokec6 currentLevel\cf4 \strokec4 ); \cf2 \strokec2 // Load the next level\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4         \cf2 \strokec2 // Clean up feedback and button\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 continueButton\cf4 \strokec4 .\cf11 \strokec11 remove\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 feedback\cf4 \strokec4 .\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 feedback\cf4 \strokec4 .\cf9 \strokec9 classList\cf4 \strokec4 .\cf11 \strokec11 remove\cf4 \strokec4 (\cf10 \strokec10 "completed"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \};\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Disable the "Submit Answer" button to prevent further input\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "submit-answer"\cf4 \strokec4 ).\cf6 \strokec6 disabled\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf5 \strokec5 true\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 loadQuestion\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "question"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 questions\cf4 \strokec4 [\cf6 \strokec6 currentQuestionIndex\cf4 \strokec4 ].\cf6 \strokec6 question\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "answer-input"\cf4 \strokec4 ).\cf6 \strokec6 value\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf11 \strokec11 updateProgressBar\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "feedback"\cf4 \strokec4 ).\cf6 \strokec6 innerText\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 ""\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 toggleTitleMusic\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 titleMusicButton\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "toggle-title-music"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf2 \strokec2 // Title music is assumed to be the first track in the musicTracks array\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 titleMusic\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf9 \strokec9 musicTracks\cf4 \strokec4 [\cf8 \strokec8 0\cf4 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf7 \strokec7 !\cf9 \strokec9 titleMusic\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Title music is not defined."\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 return\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 isTitleMusicPlaying\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 titleMusic\cf4 \strokec4 .\cf11 \strokec11 pause\cf4 \strokec4 (); \cf2 \strokec2 // Pause the music\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 titleMusic\cf4 \strokec4 .\cf6 \strokec6 currentTime\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf8 \strokec8 0\cf4 \strokec4 ; \cf2 \strokec2 // Optionally reset the music to the beginning\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 titleMusicButton\cf4 \strokec4 .\cf6 \strokec6 src\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "assets/images/mute.png"\cf4 \strokec4 ; \cf2 \strokec2 // Update the icon to mute\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 titleMusic\cf4 \strokec4 .\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4             \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \});\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 titleMusicButton\cf4 \strokec4 .\cf6 \strokec6 src\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "assets/images/unmute.png"\cf4 \strokec4 ; \cf2 \strokec2 // Update the icon to unmute\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf6 \strokec6 isTitleMusicPlaying\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf7 \strokec7 !\cf6 \strokec6 isTitleMusicPlaying\cf4 \strokec4 ; \cf2 \strokec2 // Toggle the music state\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 toggleGameMusic\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 gameMusicButton\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf6 \strokec6 document\cf4 \strokec4 .\cf11 \strokec11 getElementById\cf4 \strokec4 (\cf10 \strokec10 "toggle-game-music"\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \cf5 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 currentMusic\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf9 \strokec9 musicTracks\cf4 \strokec4 [\cf6 \strokec6 currentLevel\cf4 \strokec4 ]; \cf2 \strokec2 // Get the current level's music\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf7 \strokec7 !\cf9 \strokec9 currentMusic\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Game music is not defined for this level."\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 return\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 isGameMusicPlaying\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 currentMusic\cf4 \strokec4 .\cf11 \strokec11 pause\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 gameMusicButton\cf4 \strokec4 .\cf6 \strokec6 src\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "assets/images/mute.png"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 currentMusic\cf4 \strokec4 .\cf11 \strokec11 play\cf4 \strokec4 ().\cf11 \strokec11 catch\cf4 \strokec4 (\cf6 \strokec6 error\cf4 \strokec4  \cf5 \strokec5 =>\cf4 \strokec4  \cf6 \strokec6 console\cf4 \strokec4 .\cf11 \strokec11 error\cf4 \strokec4 (\cf10 \strokec10 "Music playback failed:"\cf4 \strokec4 , \cf6 \strokec6 error\cf4 \strokec4 ));\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf9 \strokec9 gameMusicButton\cf4 \strokec4 .\cf6 \strokec6 src\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf10 \strokec10 "assets/images/unmute.png"\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\
+\cf4 \cb3 \strokec4     \cf6 \strokec6 isGameMusicPlaying\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  \cf7 \strokec7 !\cf6 \strokec6 isGameMusicPlaying\cf4 \strokec4 ; \cf2 \strokec2 // Toggle the music state\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Navigation\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 goToPreviousLevel\cf4 \strokec4 () \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf13 \strokec13 if\cf4 \strokec4  (\cf6 \strokec6 currentLevel\cf4 \strokec4  \cf7 \strokec7 ===\cf4 \strokec4  \cf8 \strokec8 1\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 resetGame\cf4 \strokec4 ();\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \} \cf13 \strokec13 else\cf4 \strokec4  \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf6 \strokec6 currentLevel\cf7 \strokec7 --\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf11 \strokec11 loadLevel\cf4 \strokec4 (\cf6 \strokec6 currentLevel\cf4 \strokec4 );\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 function\cf4 \strokec4  \cf11 \strokec11 getQuestionsForLevel\cf4 \strokec4 (\cf6 \strokec6 level\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \cf13 \strokec13 switch\cf4 \strokec4  (\cf6 \strokec6 level\cf4 \strokec4 ) \{\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 1\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level1Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 2\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level2Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 3\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level3Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 4\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level4Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 5\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level5Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 6\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level6Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 7\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level7Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 case\cf4 \strokec4  \cf8 \strokec8 8\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  \cf9 \strokec9 level8Questions\cf4 \strokec4 ;\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4         \cf13 \strokec13 default\cf4 \strokec4 : \cf13 \strokec13 return\cf4 \strokec4  [];\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 \}\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 // Questions\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level1Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "What is the area of a rectangular stone block with length 6 and width 4?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "24"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "If a pyramid base has a side length of 10, what is the perimeter of the base?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "40"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A farmer has a field that is 8 cubits long and 3 cubits wide. What is the area of the field?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "24"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "An obelisk casts a shadow of 12 cubits. If the height of the obelisk is 3 times the shadow, what is its height?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "36"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A worker needs 5 baskets of stones each day for 6 days. How many baskets are needed in total?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "30"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "An Egyptian craftsman has a piece of wood that is 15 cubits long. If he cuts it into pieces of 3 cubits each, how many pieces does he have?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "5"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A rectangular temple floor is 7 cubits long and 6 cubits wide. What is the perimeter of the floor?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "26"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A boat carries 4 jars of grain, each holding 8 measures. How much grain is carried in total?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "32"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "If a worker builds 2 blocks each hour, how many blocks will he build in a 10-hour day?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "20"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "The length of a rope is 9 cubits, and it\'92s cut into 3 equal parts. How long is each part?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "3"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level2Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "What is the perimeter of a square Greek temple base with side length 10?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "40"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A Greek amphora holds 24 liters of wine. If it is filled into bottles of 3 liters each, how many bottles are needed?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "8"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "The Parthenon has 8 columns on each side and 17 columns along its length. How many columns in total?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "46"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A chariot travels 12 kilometers in 1 hour. How far does it travel in 3 hours?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "36"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A circular arena has a radius of 7. What is its area? (Use \uc0\u960  = 3)"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "147"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A farmer divides his field into 4 equal parts. If the field's area is 400 square meters, what is the area of each part?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "100"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A Greek mathematician calculates 3 sides of a triangle as 3, 4, and 5. What is its perimeter?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "12"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "The Greek city has a population of 120,000. If 20% are warriors, how many warriors are there?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "24000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A statue costs 500 drachmas. How much do 6 statues cost?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "3000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "The angle of a right triangle measures 90\'b0. What is the sum of the other two angles?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "90"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level3Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "What is the Roman numeral for 50?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "L"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A Roman aqueduct carries 200 liters of water per minute. How much water flows in 10 minutes?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "2000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "If a colosseum has 80 arches, and each supports 25 tons, what is the total weight supported?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "2000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "Convert the Roman numeral 'XIV' to a decimal number."\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "14"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A Roman legion has 4800 soldiers. If divided into 12 groups, how many soldiers are in each group?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "400"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A farmer divides his land of 900 square meters into 15 equal parts. What is the area of each part?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "60"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A chariot travels 15 kilometers in 3 hours. What is its speed in kilometers per hour?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "5"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "Convert the decimal number 99 to a Roman numeral."\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "XCIX"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A gladiator needs 3 liters of water daily. How much water is required for 10 days?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "30"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A Roman road is 120 kilometers long. If a messenger travels 40 kilometers daily, how many days will it take to travel the entire road?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "3"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level4Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A lord divides his estate of 800 acres among 4 heirs. How many acres does each heir receive?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "200"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A farmer has 50 bushels of grain and sells 15 bushels. How many bushels are left?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "35"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "If a knight travels 20 miles per day, how far will he travel in 8 days?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "160"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A castle has 6 towers, and each tower requires 120 stones. How many stones are needed in total?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "720"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A merchant buys 100 bolts of cloth for 300 gold coins. What is the price per bolt?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "3"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A village produces 500 loaves of bread per week. How many loaves are produced in 10 weeks?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "5000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A telescope has 3 lenses, each magnifying by 10x. What is the total magnification?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "30"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A star chart shows 12 constellations. If 4 constellations are visible at night, how many are hidden?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "8"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A blacksmith makes 5 swords per day. How many swords are made in a week?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "35"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A tax collector takes 10% of a villager's 200 gold coins. How much is taken?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "20"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level5Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A painting is 120 cm tall and 80 cm wide. What is its area in square centimeters?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "9600"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A map uses a scale of 1:50,000. If a route is 10 cm on the map, how many kilometers does it represent?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "5"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A ship travels 80 miles in 4 hours. What is its average speed in miles per hour?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "20"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A lens magnifies objects by a factor of 5. If the object is 4 mm tall, how tall does it appear?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "20"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A triangular window has a base of 6 meters and a height of 4 meters. What is its area in square meters?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "12"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "An explorer divides a treasure of 840 gold coins equally among 7 crew members. How many coins does each member receive?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "120"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A printing press produces 240 pages in 6 hours. How many pages does it produce per hour?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "40"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A gear rotates 90 times in 3 minutes. What is its rotational speed in rotations per second?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "0.5"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "An artist mixes 3 parts blue paint with 2 parts yellow paint. If they use 15 liters of paint, how many liters are blue?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "9"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A cannonball travels 150 meters in 5 seconds. What is its average speed in meters per second?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "30"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level6Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A steam engine requires 12 gallons of water to produce 600 kilowatts of power. How many gallons are needed to produce 1,800 kilowatts?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "36"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A factory machine produces 720 items in 24 hours. If the machine operates for 16 hours, how many items will it produce?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "480"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A gear rotates 360 times in an hour. How many degrees does it rotate per second?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "6"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A train carries 240 passengers over a 300-mile journey in 5 hours. What is the average speed in miles per hour?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "60"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A coal mine produces 2,500 tons of coal in 50 days. How many tons does it produce in 120 days?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "6000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A factory line can produce 450 parts in 15 hours. If the factory adds another machine doubling the output, how many parts will it produce in 20 hours?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "1200"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A steamship consumes 400 gallons of fuel to travel 200 miles. What is its fuel consumption in gallons per mile?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "2"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A bridge is constructed using 12,000 steel beams, each weighing 500 kilograms. What is the total weight of the steel used in tons? (1 ton = 1,000 kilograms)"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "6000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A train takes 3 hours to cover a distance of 210 miles. If the train increases its speed by 30%, how many miles will it travel in 3 hours?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "273"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A factory increases its production by 25% each year. If it currently produces 800 units, how many units will it produce in 2 years?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "1250"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level7Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A rocket burns 1,200 kg of fuel per second. How much fuel is burned in 3 minutes?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "216000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A satellite completes one orbit of 40,000 km in 2 hours. What is its speed in km/h?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "20000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "If a spaceship accelerates at 10 m/s\'b2 for 60 seconds, what is its final speed in m/s?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "600"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A planet is 120 million km from the sun. Light travels at 300,000 km/s. How long does light take to reach the planet in seconds?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "400"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A rocket carries 5 astronauts and each uses 3 liters of oxygen per hour. How many liters are needed for a 24-hour journey?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "360"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "An orbit requires 12,000 liters of fuel. If the rocket has a capacity of 3,000 liters, how many refuels are needed?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "4"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A satellite transmits data at 50 megabits per second. How much data is transmitted in 1 minute?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "3000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A spaceship travels 500,000 km in 10 hours. What is its average speed in km/h?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "50000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "If Earth's gravity is 9.8 m/s\'b2, what is the weight of a 1,000 kg object on Earth in Newtons?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "9800"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A solar panel generates 200 watts per hour. How many watts does it produce in 24 hours?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "4800"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf4 \strokec4  \cf9 \strokec9 level8Questions\cf4 \strokec4  \cf7 \strokec7 =\cf4 \strokec4  [\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A neural network has 3 layers with 128, 64, and 32 nodes respectively. How many total nodes are there?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "224"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A self-driving car processes 10 GB of data per hour. How much data is processed in a 24-hour period?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "240"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "An AI model has an accuracy of 90%. If it analyzes 1,000 data points, how many are correctly classified?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "900"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A robot arm performs 25000 tasks in 5 minutes. How many tasks does it perform per second?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "83"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A dataset has 1,000 rows and 20 columns. How many data points does it contain?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "20000"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A machine learning algorithm improves accuracy by 2% with each iteration. Starting at 80%, what is the accuracy after 5 iterations?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "90"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A chatbot responds to 120 queries in an hour. How many queries does it handle in 10 hours?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "1200"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A training session for an AI model takes 2 hours. How long will 5 training sessions take in total?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "10"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "An AI model predicts with 98% precision. Out of 1,000 predictions, how many are correct?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "980"\cf4 \strokec4  \},\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4     \{ \cf6 \strokec6 question:\cf4 \strokec4  \cf10 \strokec10 "A server processes 15 terabytes of data daily. How many terabytes are processed in a week?"\cf4 \strokec4 , \cf6 \strokec6 answer:\cf4 \strokec4  \cf10 \strokec10 "105"\cf4 \strokec4  \}\cf4 \cb1 \strokec4 \
+\cf4 \cb3 \strokec4 ];\cf4 \cb1 \strokec4 \
+\
+}

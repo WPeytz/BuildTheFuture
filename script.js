@@ -99,6 +99,59 @@ function startGame() {
     loadQuestion(); // Load the first question
 }
 
+// Add the fade-to-black HTML and styles dynamically
+function addFadeToBlack() {
+    // Add the fade-to-black element
+    const fadeToBlack = document.createElement("div");
+    fadeToBlack.id = "fade-to-black";
+    fadeToBlack.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        opacity: 0;
+        z-index: 9999;
+        transition: opacity 3s ease-in-out;
+    `;
+    document.body.appendChild(fadeToBlack);
+
+    // Add the final message element
+    const finalMessage = document.createElement("div");
+    finalMessage.id = "final-message";
+    finalMessage.style.cssText = `
+        color: white;
+        font-family: 'Cinzel', serif;
+        font-size: 3em;
+        text-align: center;
+        line-height: 1.5;
+        z-index: 10000;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        animation: fade-in-text 3s ease-in-out 3s forwards;
+    `;
+    finalMessage.innerHTML = `
+        <p>You did it! Now go BuildTheFuture!</p>
+        <p>Made by William Peytz</p>
+    `;
+    document.body.appendChild(finalMessage);
+
+    // Add keyframe animation for fade-in-text
+    const style = document.createElement("style");
+    style.innerHTML = `
+        @keyframes fade-in-text {
+            to {
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // Utility Functions
 function resetGame() {
     currentLevel = 1;
@@ -228,7 +281,7 @@ function loadLevel(level) {
         // Level 8: The AI Era
         gameContent.style.display = "block";
         gameContent.className = "level-8"; // Apply Level 8 class
-        gameContent.style.backgroundImage = 'url("assets/images/ai.jpg")'; // Set background image
+        gameContent.style.backgroundImage = 'url("assets/images/ai-era.jpg")'; // Set background image
         document.querySelector("h2").innerText = "The AI Era - Level 8";
     
         musicTracks[8].play().catch(error => console.error("Music playback failed:", error)); // Level 8 music
@@ -262,8 +315,6 @@ function goToNextLevel() {
     if (currentLevel < totalLevels) {
         currentLevel++;
         loadLevel(currentLevel);
-    } else {
-        alert("This is the last level! More levels coming soon.");
     }
 }
 
@@ -294,35 +345,53 @@ const incorrectMessages = [
 
 function checkAnswer() {
     const userAnswer = document.getElementById("answer-input").value.trim();
-    const correctAnswer = questions[currentQuestionIndex]?.answer;
+    const feedback = document.getElementById("feedback");
+
+    // Ensure questions array and current question are valid
+    if (!questions || !questions[currentQuestionIndex]) {
+        console.error("Question data is not available.");
+        return;
+    }
+
+    // Get the correct answer for the current question
+    const correctAnswer = questions[currentQuestionIndex].answer;
 
     if (userAnswer === correctAnswer) {
-        document.getElementById("feedback").innerText = "Correct!";
-        currentQuestionIndex++;
-        incorrectAttempts = 0; // Reset incorrect attempts on correct answer
-        updateProgressBar();
+        feedback.innerText = "Correct!";
+        feedback.classList.add("completed");
 
+        incorrectAttempts = 0; // Reset incorrect attempts on correct answer
+
+        // Update progress bar
+        const progressBar = document.getElementById("progress-bar");
+        const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+
+        // Move to the next question or handle level completion
+        currentQuestionIndex++;
         if (currentQuestionIndex < questions.length) {
             loadQuestion();
         } else {
             handleLevelCompletion();
         }
-
-        // Remove the skip button if it exists
-        const skipButton = document.getElementById("skip-button");
-        if (skipButton) skipButton.remove();
     } else {
-        const feedbackElement = document.getElementById("feedback");
-        feedbackElement.innerText = getNextIncorrectMessage();
-        incorrectAttempts++; // Increment incorrect attempts on incorrect answer
+        // Increment incorrect attempts
+        incorrectAttempts++;
+        console.log("Incorrect Attempts:", incorrectAttempts);
 
-        console.log("Incorrect Attempts:", incorrectAttempts); // Debugging log
+        // Display incorrect feedback
+        feedback.innerText = getNextIncorrectMessage();
+        feedback.classList.remove("completed");
 
-        // Show skip button if 5 or more incorrect attempts
+        // Add skip button if 5 or more incorrect attempts
         if (incorrectAttempts >= 5) {
+            console.log("Adding Skip Button");
             addSkipButton();
         }
     }
+
+    // Clear the input field
+    document.getElementById("answer-input").value = "";
 }
 
 
@@ -343,7 +412,7 @@ function addSkipButton() {
     // Append the button and attach functionality
     document.getElementById("game-content").appendChild(skipButton);
     skipButton.onclick = () => {
-        incorrectAttempts = 0;
+        incorrectAttempts = 0; // Reset incorrect attempts
         currentQuestionIndex++;
         currentQuestionIndex < questions.length ? loadQuestion() : handleLevelCompletion();
         skipButton.remove();
@@ -352,7 +421,6 @@ function addSkipButton() {
 
 function handleLevelCompletion() {
     const feedback = document.getElementById("feedback");
-    const continueButton = document.createElement("button");
 
     // Level names for feedback
     const levelNames = {
@@ -373,18 +441,19 @@ function handleLevelCompletion() {
     // If it's the last level, trigger the fade-to-black effect
     if (currentLevel === totalLevels) {
         setTimeout(() => {
-            fadeElement.classList.add("visible"); // Trigger fade effect
+            // Clear the feedback text
+            feedback.innerText = "";
+
+            // Trigger fade-to-black effect
+            const fadeElement = document.getElementById("fade-to-black");
+            fadeElement.classList.add("visible");
         }, 2000); // Delay to show feedback for 2 seconds
 
-        // Reset the game after fade
-        setTimeout(() => {
-            alert("Thank you for playing BuildTheFuture!");
-            resetGame();
-        }, 5000); // Additional 3 seconds after fade starts
-        return; // End function here for the last level
+        return; // End function for the last level
     }
 
-    // Create and style the "Continue" button
+    // Create and style the "Continue" button for other levels
+    const continueButton = document.createElement("button");
     continueButton.id = "continue-button";
     continueButton.innerText = currentLevel < totalLevels ? "Continue" : "Finish";
     continueButton.style.display = "block";
