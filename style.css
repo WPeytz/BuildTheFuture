@@ -1,38 +1,11 @@
-/* Import Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;700&family=Lora:wght@400;700&display=swap');
-
 /* General Styles */
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#title-screen, #game-content {
-    transition: opacity 0.5s ease-in-out;
-}
-
-/* Shared Button Styles */
-button, #skip-button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    font-family: 'Cinzel', serif;
     color: white;
 }
 
-button:hover, #skip-button:hover {
-    background-color: darken(var(--btn-bg-color), 10%);
-}
-
-/* Title Screen */
 #title-screen {
     display: flex;
     flex-direction: column;
@@ -40,27 +13,36 @@ button:hover, #skip-button:hover {
     justify-content: center;
     height: 100vh;
     text-align: center;
-    background: url("assets/images/TitleScreen.jpg") no-repeat center / cover;
+    background-image: url("assets/images/TitleScreen.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: white;
 }
 
 #title-screen h1 {
-    font-size: 7em;
+    font-size: 5em;
     margin-bottom: 20px;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     text-transform: uppercase;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.8), -3px -3px 7px rgba(0, 0, 0, 0.6);
 }
 
 #start-game {
-    background-color: blue;
+    padding: 20px 40px;
+    font-size: 1.5em;
+    background-color: darkblue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s;
 }
 
 #start-game:hover {
     background-color: darkblue;
 }
 
-/* Game Content */
 #game-content {
     display: none;
     position: relative;
@@ -71,283 +53,274 @@ button:hover, #skip-button:hover {
     background-repeat: no-repeat;
 }
 
-#game-content h2 {
-    font-family: 'Cinzel', serif;
+#level-title {
     font-size: 3em;
+    font-family: 'Cinzel', serif;
     font-weight: bold;
+    text-align: center;
     margin-bottom: 20px;
-    text-shadow: 0 0 5px white;
-    color: black;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
 }
 
-#question {
-    font-size: 1.5em; /* Increased from default to make it bigger */
-    font-weight: bold;
-    margin: 20px 0;
-}
-
-/* Progress Bar */
-/* Progress Bar */
-#progress-container {
-    width: 100%;
-    background-color: white; /* Background of the container */
-    margin: 20px 0;
-    height: 20px; /* Adjust as needed */
-    border-radius: 10px; /* Optional for rounded corners */
-    overflow: hidden;
-}
-
-#progress-bar {
-    height: 100%; /* Matches the height of the container */
-    transition: width 0.3s ease-in-out; /* Smoothly transitions as progress updates */
-}
-
-/* Generic Progress Bar Style */
-#progress-bar {
-    width: 0%;
-    height: 20px;
-    background-color: var(--progress-color, #ddd); /* Default to #ddd */
-    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
-}
-
-/* Level-Specific Progress Bar Colors */
-.level-1 {
-    --progress-color: #FFD700; /* Gold for Ancient Egypt */
-}
-
-.level-2 {
-    --progress-color: #1F75FE; /* Bright Blue for Ancient Greece */
-}
-
-.level-3 {
-    --progress-color: #A52A2A; /* Reddish-Brown for Ancient Rome */
-}
-
-.level-4 {
-    --progress-color: #4A7023; /* Dark Green for Medieval Europe */
-}
-
-.level-5 {
-    --progress-color: #8B0000; /* Deep Red for Renaissance */
-}
-
-.level-6 {
-    --progress-color: #708090; /* Slate Gray for Industrial Revolution */
-}
-
-.level-7 {
-    --progress-color: #1E90FF; /* Dodger Blue for Space Age */
-}
-
-.level-8 {
-    --progress-color: #00FFCC; /* Neon Green for AI Era */
-}
-
-/* Input */
+/* Input Field */
 #answer-input {
-    padding: 8px;
-    font-size: 1em;
-    width: 200px;
-    border: 2px solid var(--input-border-color, #4CAF50);
-    border-radius: 5px;
+    display: block;
+    margin: 20px auto;
+    padding: 10px;
+    font-size: 1.2em;
+    border: 2px solid #C2B280;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+}
+
+/* Check Answer Button */
+#submit-answer {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 20px auto;
+}
+
+#submit-answer:hover {
+    background-color: #45a049;
 }
 
 /* Feedback */
 #feedback {
-    font-size: 1.5em; /* Matches the question font size */
-    font-weight: bold;
-    margin: 20px 0; /* Matches the question margin */
-    text-align: center;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Matches the question shadow */
-    color: inherit; /* Inherits the color based on the level's theme */
-}
-
-#feedback.completed {
     font-size: 2em;
-    color: black;
-    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+    color: var(--message-color);
+    text-shadow: var(--message-shadow);
 }
 
-#skip-button {
-    position: absolute; /* Position relative to the container */
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Adjust for the element's size */
-    padding: 15px 30px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: var(--btn-bg-color, #4CAF50); /* Default green */
-    color: white;
-    transition: background-color 0.3s;
-}
 
-#skip-button:hover {
-    background-color: darken(var(--btn-bg-color, 10%)); /* Slightly darker on hover */
-}
-
-/* Music Toggle Buttons */
-#toggle-title-music, #toggle-game-music {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-}
-
-#toggle-title-music:hover, #toggle-game-music:hover {
-    opacity: 1;
+/* General Question Style */
+#question {
+    font-size: 2em; /* Increased font size for better readability */
+    font-weight: bold;K
+    margin: 20px auto;
+    color: var(--question-color); /* Dynamic color based on level */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Black shadow for contrast */
+    text-align: center;
+    padding: 10px;
+    max-width: 80%;
 }
 
 /* Level-Specific Styles */
 
 /* Level 1: Ancient Egypt */
 .level-1 {
-    background-image: url("assets/images/egypt.jpg");
+    background: url("assets/images/egypt.jpg") no-repeat center/cover;
 }
 
-.level-1 #question, .level-1 #game-content h2 {
-    color: #FFD700; /* Gold to match Ancient Egypt's royal theme */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Shadow for readability */
+.level-1 #question {
+    color: goldenrod;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-1 button, .level-1 #skip-button {
-    background-color: #C2B280; /* Sand color */
+.level-1 #submit-answer {
+    background-color: #C2B280;
+    color: black;
+}
+
+.level-1 #submit-answer:hover {
+    background-color: #A99A6B;
 }
 
 /* Level 2: Ancient Greece */
 .level-2 {
-    background-image: url("assets/images/greece.jpg");
+    background: url("assets/images/greece.jpg") no-repeat center/cover;
 }
 
-.level-2 #question, .level-2 #game-content h2 {
-    color: #1F75FE; /* Bright blue for Ancient Greece */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+.level-2 #question {
+    color: lightblue;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-2 button, .level-2 #skip-button {
-    background-color: #4682B4; /* Steel blue */
+.level-2 #submit-answer {
+    background-color: #0077be;
+    color: white;
+}
+
+.level-2 #submit-answer:hover {
+    background-color: #00509e;
 }
 
 /* Level 3: Ancient Rome */
 .level-3 {
-    background-image: url("assets/images/rome.jpg");
+    background: url("assets/images/rome.jpg") no-repeat center/cover;
 }
 
-.level-3 #question, .level-3 #game-content h2 {
-    color: #A52A2A; /* Reddish-brown to reflect Roman brick colors */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+.level-3 #question {
+    color: crimson;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-3 button, .level-3 #skip-button {
-    background-color: #8B4513; /* Saddle brown for buttons */
+.level-3 #submit-answer {
+    background-color: #A52A2A;
+    color: white;
+}
+
+.level-3 #submit-answer:hover {
+    background-color: #800000;
 }
 
 /* Level 4: Medieval Europe */
 .level-4 {
-    background-image: url("assets/images/medieval.jpg");
+    background: url("assets/images/medieval.jpg") no-repeat center/cover;
 }
 
-.level-4 #question, .level-4 #game-content h2 {
-    color: #4A7023; /* Dark green for Medieval forests */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+.level-4 #question {
+    color: lightgreen;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-4 button, .level-4 #skip-button {
-    background-color: #6B8E23; /* Olive drab */
+.level-4 #submit-answer {
+    background-color: #4A7023;
+    color: white;
+}
+
+.level-4 #submit-answer:hover {
+    background-color: #365314;
 }
 
 /* Level 5: Renaissance */
 .level-5 {
-    background-image: url("assets/images/renaissance.jpg");
+    background: url("assets/images/renaissance.jpg") no-repeat center/cover;
 }
 
-.level-5 #question, .level-5 #game-content h2 {
-    color: #8B0000; /* Deep red for Renaissance opulence */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+.level-5 #question {
+    color: saddlebrown;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-5 button, .level-5 #skip-button {
-    background-color: #DC143C; /* Crimson for buttons */
+.level-5 #submit-answer {
+    background-color: #8B0000;
+    color: white;
+}
+
+.level-5 #submit-answer:hover {
+    background-color: #660000;
 }
 
 /* Level 6: Industrial Revolution */
 .level-6 {
-    background-image: url("assets/images/industrial.jpg");
+    background: url("assets/images/industrial.jpg") no-repeat center/cover;
 }
 
-.level-6 #question, .level-6 #game-content h2 {
-    color: #708090; /* Slate gray to match Industrial themes */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+.level-6 #question {
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-6 button, .level-6 #skip-button {
-    background-color: #556B2F; /* Olive drab */
+.level-6 #submit-answer {
+    background-color: #556B2F;
+    color: white;
+}
+
+.level-6 #submit-answer:hover {
+    background-color: #6B8E23;
 }
 
 /* Level 7: The Space Age */
 .level-7 {
-    background-image: url("assets/images/space.jpg");
+    background: url("assets/images/space.jpg") no-repeat center/cover;
 }
 
-.level-7 #question, .level-7 #game-content h2 {
-    color: #87CEEB; /* Sky blue to represent space exploration */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+.level-7 #question {
+    color: lightblue;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-7 button, .level-7 #skip-button {
-    background-color: #1E90FF; /* Dodger blue */
+.level-7 #submit-answer {
+    background-color: #1e3d59;
+    color: white;
+}
+
+.level-7 #submit-answer:hover {
+    background-color: #284b63;
 }
 
 /* Level 8: The AI Era */
 .level-8 {
-    background-image: url("assets/images/ai-era.jpg");
+    background: url("assets/images/ai-era.jpg") no-repeat center/cover;
 }
 
-.level-8 #question, .level-8 #game-content h2 {
-    color: #00FFCC; /* Neon green to fit futuristic AI themes */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+.level-8 #question {
+    color: #00ffcc;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
-.level-8 button, .level-8 #skip-button {
-    background-color: #333333; /* Dark gray for AI */
-}
-
-
-.fade-to-black {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-}
-
-.fade-to-black.visible {
-    opacity: 1;
-}
-
-#final-message {
+.level-8 #submit-answer {
+    background-color: #333333;
     color: white;
-    font-family: 'Cinzel', serif;
-    font-size: 3em;
-    text-align: center;
-    line-height: 1.5;
-    z-index: 10000; 
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    animation: fade-in-text 3s ease-in-out 3s forwards;
 }
 
-@keyframes fade-in-text {
-    to {
-        opacity: 1;
-    }
+.level-8 #submit-answer:hover {
+    background-color: #555555;
 }
+
+/* General Skip and Continue Button Styles */
+#skip-button, #continue-button {
+    display: none;
+    margin: 20px auto;
+    padding: 12px 24px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    background-color: var(--button-color); /* Dynamic color */
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+#skip-button:hover, #continue-button:hover {
+    background-color: var(--button-hover-color); /* Dynamic hover color */
+}
+
+/* Progress Bar */
+#progress-container {
+    width: 80%; /* Adjust to fit your layout */
+    margin: 20px auto;
+    background-color: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 25px;
+}
+
+#progress-bar {
+    width: 0%; /* Start at 0% */
+    height: 100%;
+    background-color: var(--button-color); /* Ensure level-specific styles apply */
+    transition: width 0.3s ease-in-out;
+}
+
+
+/* Speaker/Mute Icon */
+#toggle-title-music, #toggle-game-music {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 40px; /* Reduce width */
+    height: 40px; /* Reduce height */
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+#toggle-title-music:hover, #toggle-game-music:hover {
+    opacity: 1; /* Brighten on hover */
+    transform: scale(1.1); /* Slight zoom-in effect */
+}
+
