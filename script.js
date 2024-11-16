@@ -42,7 +42,6 @@ window.onload = function () {
 document.getElementById("toggle-title-music").onclick = toggleTitleMusic;
 document.getElementById("toggle-game-music").onclick = toggleGameMusic;
 document.getElementById("start-game").addEventListener("click", function () {
-    console.log("Start Game button clicked"); // Debugging output
     currentLevel = 1; // Move to Level 1
     loadLevel(currentLevel); // Call the loadLevel function
 });
@@ -246,18 +245,19 @@ function loadLevel(level) {
 function loadQuestion() {
     const questionElement = document.getElementById("question");
     if (!questions[currentQuestionIndex]) {
-        console.error("No questions available for this level.");
+        console.error("No questions available.");
         return;
     }
 
+    // Load the current question
     questionElement.innerText = questions[currentQuestionIndex].question;
-    document.getElementById("answer-input").value = ""; // Clear input field
-    updateProgressBar();
-    document.getElementById("feedback").innerText = ""; // Clear feedback
 
-    // Do NOT hide the skip button here
+    // Reset feedback and input
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("answer-input").value = "";
+
+    // Do NOT reset incorrectAttempts here!
 }
-
 function goToNextLevel() {
     if (currentLevel < totalLevels) {
         currentLevel++;
@@ -292,7 +292,6 @@ const incorrectMessages = [
     "Don’t give up! Try one more time!"
 ];
 
-
 function checkAnswer() {
     const userAnswer = document.getElementById("answer-input").value.trim();
     const correctAnswer = questions[currentQuestionIndex]?.answer;
@@ -308,24 +307,51 @@ function checkAnswer() {
         } else {
             handleLevelCompletion();
         }
+
+        // Remove the skip button if it exists
+        const skipButton = document.getElementById("skip-button");
+        if (skipButton) skipButton.remove();
     } else {
         const feedbackElement = document.getElementById("feedback");
         feedbackElement.innerText = getNextIncorrectMessage();
         incorrectAttempts++; // Increment incorrect attempts on incorrect answer
 
-        console.log("Incorrect attempts:", incorrectAttempts); // Debugging log
+        console.log("Incorrect Attempts:", incorrectAttempts); // Debugging log
 
         // Show skip button if 5 or more incorrect attempts
         if (incorrectAttempts >= 5) {
-            console.log("Adding skip button."); // Debugging log
             addSkipButton();
         }
     }
 }
 
+
+function addSkipButton() {
+    if (document.getElementById("skip-button")) return; // Skip if button already exists
+
+    const skipButton = document.createElement("button");
+    skipButton.id = "skip-button";
+    skipButton.innerText = "Skip Question";
+
+    // Match styles with the Check Answer button
+    const checkAnswerButton = document.getElementById("submit-answer");
+    if (checkAnswerButton) {
+        skipButton.style.cssText = checkAnswerButton.style.cssText; // Copy inline styles
+        skipButton.className = checkAnswerButton.className; // Copy CSS classes
+    }
+
+    // Append the button and attach functionality
+    document.getElementById("game-content").appendChild(skipButton);
+    skipButton.onclick = () => {
+        incorrectAttempts = 0;
+        currentQuestionIndex++;
+        currentQuestionIndex < questions.length ? loadQuestion() : handleLevelCompletion();
+        skipButton.remove();
+    };
+}
+
 function handleLevelCompletion() {
     const feedback = document.getElementById("feedback");
-    const fadeElement = document.getElementById("fade-to-black");
     const continueButton = document.createElement("button");
 
     // Level names for feedback
@@ -397,51 +423,6 @@ function loadQuestion() {
     document.getElementById("feedback").innerText = "";
 }
 
-function addSkipButton() {
-    // Check if the skip button already exists
-    if (document.getElementById("skip-button")) {
-        console.log("Skip button already exists."); // Debugging log
-        return;
-    }
-
-    console.log("Creating Skip Button..."); // Debugging log
-
-    // Create the skip button
-    const skipButton = document.createElement("button");
-    skipButton.id = "skip-button";
-    skipButton.innerText = "Skip Question";
-
-    // Style the button dynamically based on the current level
-    const gameContent = document.getElementById("game-content");
-    skipButton.style.marginTop = "15px";
-    skipButton.style.padding = "10px 20px";
-    skipButton.style.border = "none";
-    skipButton.style.borderRadius = "5px";
-    skipButton.style.cursor = "pointer";
-    skipButton.style.fontSize = "1.2em";
-    skipButton.style.backgroundColor = "#4CAF50"; // Default green
-    skipButton.style.color = "white";
-
-    // Append the button to the game content
-    gameContent.appendChild(skipButton);
-
-    // Add click event to skip the question
-    skipButton.onclick = function () {
-        console.log("Skip button clicked."); // Debugging log
-        incorrectAttempts = 0; // Reset attempts for the next question
-        currentQuestionIndex++; // Move to the next question
-
-        if (currentQuestionIndex < questions.length) {
-            loadQuestion(); // Load the next question
-        } else {
-            handleLevelCompletion(); // Handle level completion
-        }
-
-        // Remove the skip button
-        skipButton.remove();
-    };
-}
-
 function toggleTitleMusic() {
     const titleMusicButton = document.getElementById("toggle-title-music");
 
@@ -468,22 +449,23 @@ function toggleTitleMusic() {
 }
 
 function toggleGameMusic() {
-    if (isGameMusicPlaying) {
-        if (currentLevel === 1) {
-            level1Music.pause();
-        } else if (currentLevel === 2) {
-            level2Music.pause();
-        }
-        document.getElementById("toggle-game-music").src = "assets/images/mute.png";
-    } else {
-        if (currentLevel === 1) {
-            level1Music.play().catch(error => console.error("Music playback failed:", error));
-        } else if (currentLevel === 2) {
-            level2Music.play().catch(error => console.error("Music playback failed:", error));
-        }
-        document.getElementById("toggle-game-music").src = "assets/images/unmute.png";
+    const gameMusicButton = document.getElementById("toggle-game-music");
+    const currentMusic = musicTracks[currentLevel]; // Get the current level's music
+
+    if (!currentMusic) {
+        console.error("Game music is not defined for this level.");
+        return;
     }
-    isGameMusicPlaying = !isGameMusicPlaying;
+
+    if (isGameMusicPlaying) {
+        currentMusic.pause();
+        gameMusicButton.src = "assets/images/mute.png";
+    } else {
+        currentMusic.play().catch(error => console.error("Music playback failed:", error));
+        gameMusicButton.src = "assets/images/unmute.png";
+    }
+
+    isGameMusicPlaying = !isGameMusicPlaying; // Toggle the music state
 }
 
 // Navigation
@@ -614,3 +596,4 @@ const level8Questions = [
     { question: "An AI model predicts with 98% precision. Out of 1,000 predictions, how many are correct?", answer: "980" },
     { question: "A server processes 15 terabytes of data daily. How many terabytes are processed in a week?", answer: "105" }
 ];
+
