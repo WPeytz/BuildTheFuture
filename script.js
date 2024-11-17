@@ -9,7 +9,7 @@ let lastIncorrectMessageIndex = -1; // To track the last used incorrect message
 
 // Music file URLs
 const musicUrls = [
-    "assets/music/TitleScreen.mp3", 
+    "assets/music/AI.mp3", 
     "assets/music/Egypt.mp3", 
     "assets/music/Greece.mp3", 
     "assets/music/Rome.mp3", 
@@ -119,13 +119,13 @@ document.getElementById("answer-input").addEventListener("keypress", function (e
     }
 });
 document.addEventListener("keydown", function (event) {
-    if (event.key === "ArrowLeft") {
+    if (event.key === "ArrowLeft" && event.altKey) {
         goToPreviousLevel();
     }
 });
 // Event Listener for Right Arrow
 document.addEventListener("keydown", function (event) {
-    if (event.key === "ArrowRight") {
+    if (event.key === "ArrowRight" && event.altKey) {
         goToNextLevel();
     }
 });
@@ -334,8 +334,6 @@ function goToNextLevel() {
     if (currentLevel < totalLevels) {
         currentLevel++;
         loadLevel(currentLevel);
-    } else {
-        alert("This is the last level! More levels coming soon.");
     }
 }
 
@@ -432,8 +430,7 @@ function handleLevelCompletion() {
     // If it's the last level, end the game
     if (currentLevel === totalLevels) {
         setTimeout(() => {
-            alert("Thank you for playing BuildTheFuture!");
-            resetGame();
+            fadeToBlack(); // Fade to black
         }, 2000); // Delay for 2 seconds
         return;
     }
@@ -528,6 +525,46 @@ function addSkipButton() {
             handleLevelCompletion(); // Handle level completion
         }
     };
+}
+
+function fadeToBlack() {
+    let fadeElement = document.getElementById("fade-to-black");
+    if (!fadeElement) {
+        fadeElement = document.createElement("div");
+        fadeElement.id = "fade-to-black";
+        document.body.appendChild(fadeElement);
+    }
+
+    // Create the text container if not already added
+    let fadeTextContainer = document.getElementById("fade-text-container");
+    if (!fadeTextContainer) {
+        fadeTextContainer = document.createElement("div");
+        fadeTextContainer.id = "fade-text-container";
+
+        // Add text content
+        fadeTextContainer.innerHTML = `
+            <p id="end-message-1">Thanks for playing</p>
+            <p id="end-message-2">Now go BuildTheFuture!</p>
+            <p id="end-message-3">Made by William Peytz</p>
+        `;
+        fadeElement.appendChild(fadeTextContainer);
+    }
+
+    // Apply the fade-in effect for the background
+    fadeElement.classList.add("visible");
+
+    // Sequentially show the messages
+    setTimeout(() => document.getElementById("end-message-1").classList.add("visible"), 1000);
+    setTimeout(() => document.getElementById("end-message-2").classList.add("visible"), 3000);
+    setTimeout(() => document.getElementById("end-message-3").classList.add("visible"), 5000);
+
+    // Automatically return to the title screen after 10 seconds
+    setTimeout(() => {
+        fadeElement.classList.remove("visible");
+        document.getElementById("title-screen").style.display = "flex";
+        document.getElementById("game-content").style.display = "none";
+        resetGame();
+    }, 7000); // 10 seconds delay
 }
 
 function toggleTitleMusic() {

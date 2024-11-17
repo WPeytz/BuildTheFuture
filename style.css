@@ -326,3 +326,52 @@ body {
     transform: scale(1.1); /* Slight zoom-in effect */
 }
 
+/* Fade-to-Black Overlay */
+#fade-to-black {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 5s ease-in-out; /* Increased duration to 5 seconds */
+    pointer-events: none;
+}
+
+#fade-to-black.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+#fade-text-container {
+    color: white;
+    font-size: 3em; /* Make the text larger */
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Center-align text */
+    font-family: 'Orbitron', sans-serif; /* Ensure the font is loaded */
+    line-height: 1.5em; /* Add spacing between lines */
+    transition: opacity 1s ease-in-out;
+}
+
+#fade-to-black #back-to-title {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    font-weight: bold;
+    background-color: #0077be; /* Adjust the color as needed */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+#fade-to-black #back-to-title:hover {
+    background-color: #00509e; /* Adjust the hover color as needed */
+}
