@@ -249,7 +249,7 @@ function loadLevel(level) {
             name: "Title Screen",
             musicIndex: 0,
             className: "",
-            backgroundImage: "",
+            backgroundImage: "url('assets/images/titlescreen.jpg')",
             questions: [],
         },
         1: {
