@@ -365,14 +365,15 @@ const incorrectMessages = [
 ];
 
 
+// Updated Check Answer Function
 function checkAnswer() {
     const userAnswer = document.getElementById("answer-input").value.trim();
     const correctAnswer = questions[currentQuestionIndex]?.answer;
 
     if (userAnswer === correctAnswer) {
         document.getElementById("feedback").innerText = "Correct!";
+        incorrectAttempts = 0; // Reset incorrect attempts
         currentQuestionIndex++;
-        incorrectAttempts = 0; // Reset incorrect attempts on correct answer
         updateProgressBar();
 
         if (currentQuestionIndex < questions.length) {
@@ -383,14 +384,18 @@ function checkAnswer() {
     } else {
         const feedbackElement = document.getElementById("feedback");
         feedbackElement.innerText = getNextIncorrectMessage();
-        incorrectAttempts++; // Increment incorrect attempts on incorrect answer
+        incorrectAttempts++; // Increment incorrect attempts
 
-        console.log("Incorrect attempts:", incorrectAttempts); // Debugging log
-
-        // Show skip button if 5 or more incorrect attempts
+        // Show the skip button after 5 incorrect attempts
         if (incorrectAttempts >= 5) {
-            console.log("Adding skip button."); // Debugging log
             addSkipButton();
+        }
+        // Remove the skip button if incorrect attempts exceed 6
+        if (incorrectAttempts > 5) {
+            const skipButton = document.getElementById("skip-button");
+            if (skipButton) {
+                skipButton.remove();
+            }
         }
     }
 }
@@ -482,46 +487,46 @@ function loadQuestion() {
 
 function addSkipButton() {
     // Check if the skip button already exists
-    if (document.getElementById("skip-button")) {
-        console.log("Skip button already exists."); // Debugging log
-        return;
-    }
-
-    console.log("Creating Skip Button..."); // Debugging log
+    let skipButton = document.getElementById("skip-button");
 
     // Create the skip button
-    const skipButton = document.createElement("button");
+    skipButton = document.createElement("button");
     skipButton.id = "skip-button";
     skipButton.innerText = "Skip Question";
 
-    // Style the button dynamically based on the current level
-    const gameContent = document.getElementById("game-content");
+    // Style the skip button
     skipButton.style.marginTop = "15px";
     skipButton.style.padding = "10px 20px";
     skipButton.style.border = "none";
-    skipButton.style.borderRadius = "5px";
+    skipButton.style.borderRadius = "8px";
     skipButton.style.cursor = "pointer";
     skipButton.style.fontSize = "1.2em";
-    skipButton.style.backgroundColor = "#4CAF50"; // Default green
+    skipButton.style.backgroundColor =
+        getComputedStyle(document.documentElement).getPropertyValue("--button-color") || "#4CAF50";
     skipButton.style.color = "white";
+    skipButton.style.display = "block";
 
-    // Append the button to the game content
-    gameContent.appendChild(skipButton);
+    // Append the skip button below the feedback message
+    const feedbackElement = document.getElementById("feedback");
+    if (!feedbackElement) {
+        console.error("Feedback element not found in the DOM.");
+        return;
+    }
 
-    // Add click event to skip the question
+    feedbackElement.insertAdjacentElement("afterend", skipButton);
+
+    // Add functionality to skip to the next question
     skipButton.onclick = function () {
-        console.log("Skip button clicked."); // Debugging log
-        incorrectAttempts = 0; // Reset attempts for the next question
+        incorrectAttempts = 0; // Reset incorrect attempts
         currentQuestionIndex++; // Move to the next question
+        skipButton.remove(); // Remove the skip button
 
+        // Check if there are more questions
         if (currentQuestionIndex < questions.length) {
             loadQuestion(); // Load the next question
         } else {
             handleLevelCompletion(); // Handle level completion
         }
-
-        // Remove the skip button
-        skipButton.remove();
     };
 }
 

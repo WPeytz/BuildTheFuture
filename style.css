@@ -106,16 +106,18 @@ body {
 
 /* General Question Style */
 #question {
-    font-size: 2em; /* Increased font size for better readability */
-    font-weight: bold;K
-    margin: 20px auto;
+    font-size: 2em; /* Adjusted for better readability */
+    font-weight: bold;
     color: var(--question-color); /* Dynamic color based on level */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Black shadow for contrast */
-    text-align: center;
-    padding: 10px;
-    max-width: 80%;
+    text-shadow: var(--message-shadow); /* Dynamic shadow based on level */
+    text-align: center; /* Centers text horizontally */
+    margin: 0 auto; /* Centers the block itself */
+    padding: 20px;
+    max-width: 80%; /* Restricts the width for better formatting */
+    position: relative;
+    top: 5%; /* Moves it to the center vertically */
+    transform: translateY(-50%); /* Ensures perfect vertical centering */
 }
-
 /* Level-Specific Styles */
 
 /* Level 1: Ancient Egypt */
@@ -129,7 +131,7 @@ body {
 }
 
 .level-1 #submit-answer {
-    background-color: #C2B280;
+    background-color: goldenrod;;
     color: black;
 }
 
@@ -200,7 +202,7 @@ body {
 }
 
 .level-5 #question {
-    color: saddlebrown;
+    color: whitesmoke;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
@@ -219,17 +221,17 @@ body {
 }
 
 .level-6 #question {
-    color: white;
+    color: lightgrey;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
 }
 
 .level-6 #submit-answer {
-    background-color: #556B2F;
+    background-color: grey;
     color: white;
 }
 
 .level-6 #submit-answer:hover {
-    background-color: #6B8E23;
+    background-color: lightgrey;
 }
 
 /* Level 7: The Space Age */
