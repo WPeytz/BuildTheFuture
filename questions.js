@@ -85,20 +85,20 @@ const level7Questions = [
     { question: "A rocket carries 5 astronauts and each uses 3 liters of oxygen per hour. How many liters are needed for a 24-hour journey?", answer: "360" },
     { question: "An orbit requires 12,000 liters of fuel. If the rocket has a capacity of 3,000 liters, how many refuels are needed?", answer: "4" },
     { question: "A satellite transmits data at 50 megabits per second. How much data is transmitted in 1 minute?", answer: "3000" },
-    { question: "A spaceship travels 500,000 km in 10 hours. What is its average speed in km/h?", answer: "50000" },
+    { question: "A spaceship travels 700,000 km in 8 hours. What is its average speed in km/h?", answer: "875000" },
     { question: "If Earth's gravity is 9.8 m/s², what is the weight of a 1,000 kg object on Earth in Newtons?", answer: "9800" },
     { question: "A solar panel generates 200 watts per hour. How many watts does it produce in 24 hours?", answer: "4800" }
 ];
 
 const level8Questions = [
-    { question: "A neural network has 3 layers with 128, 64, and 32 nodes respectively. How many total nodes are there?", answer: "224" },
-    { question: "A self-driving car processes 10 GB of data per hour. How much data is processed in a 24-hour period?", answer: "240" },
-    { question: "An AI model has an accuracy of 90%. If it analyzes 1,000 data points, how many are correctly classified?", answer: "900" },
-    { question: "A robot arm performs 25000 tasks in 5 minutes. How many tasks does it perform per second?", answer: "83" },
-    { question: "A dataset has 1,000 rows and 20 columns. How many data points does it contain?", answer: "20000" },
-    { question: "A machine learning algorithm improves accuracy by 2% with each iteration. Starting at 80%, what is the accuracy after 5 iterations?", answer: "90" },
-    { question: "A chatbot responds to 120 queries in an hour. How many queries does it handle in 10 hours?", answer: "1200" },
-    { question: "A training session for an AI model takes 2 hours. How long will 5 training sessions take in total?", answer: "10" },
-    { question: "An AI model predicts with 98% precision. Out of 1,000 predictions, how many are correct?", answer: "980" },
-    { question: "A server processes 15 terabytes of data daily. How many terabytes are processed in a week?", answer: "105" }
+    { question: "A dataset has 10,000 rows and 50 columns. How many data points does it contain?", answer: "500000" },
+    { question: "An AI model trains for 3 hours and improves its loss by 0.5% every 10 minutes. By what percentage does it improve in total?", answer: "9" },
+    { question: "A deep learning model has 10 layers, and each layer has twice as many parameters as the previous one, starting with 128 in the first layer. How many parameters are in the last layer?", answer: "65536" },
+    { question: "A computer processes 10 billion instructions per second. How many instructions does it process in a day?", answer: "864000000000000" },
+    { question: "A convolutional neural network processes an input image of size 256x256 pixels. After a 2x2 pooling layer, what is the size of the output image?", answer: "128x128" },
+    { question: "A server's CPU usage spikes to 80% for 4 hours and then runs at 20% for 6 hours. What is the average CPU usage over the 10-hour period?", answer: "44" },
+    { question: "A distributed database processes 2 terabytes of data per hour across 5 servers. How much data does each server process in 10 hours?", answer: "4" },
+    { question: "An algorithm has a time complexity of O(n^2). If n = 1000, how many operations will it perform?", answer: "1000000" },
+    { question: "A network transmits data at 1 gigabit per second. How much data is transmitted in 30 minutes, in gigabytes?", answer: "225" },
+    { question: "A hash table has a capacity of 1024 slots and uses 75% of its slots. How many slots are still available?", answer: "256" }
 ];

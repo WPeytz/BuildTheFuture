@@ -167,17 +167,42 @@ function startGame() {
 
 // Utility Functions
 function resetGame() {
-    currentLevel = 1;
-    currentQuestionIndex = 0;
+    currentLevel = 0; // Reset to the first level
+    currentQuestionIndex = 0; // Reset question index
+    incorrectAttempts = 0; // Reset incorrect attempts
+    questions = getQuestionsForLevel(currentLevel); // Load questions for level 1
 
-    document.getElementById("feedback").innerText = "";
-    document.getElementById("progress-bar").style.width = "0%";
-    document.getElementById("answer-input").value = "";
-    document.getElementById("submit-answer").disabled = false;
-    document.getElementById("continue-button")?.remove();
+    // Reset feedback and input
+    const feedbackElement = document.getElementById("feedback");
+    feedbackElement.innerText = "";
+    feedbackElement.style.display = "none"; // Hide feedback
 
+    const answerInput = document.getElementById("answer-input");
+    answerInput.value = ""; // Clear input field
+    answerInput.style.display = "block"; // Ensure input field is visible
+
+    const questionElement = document.getElementById("question");
+    questionElement.style.display = "block"; // Ensure question is visible
+
+    const checkAnswerButton = document.getElementById("submit-answer");
+    checkAnswerButton.style.display = "block"; // Ensure submit button is visible
+    checkAnswerButton.disabled = false; // Enable submit button
+
+    const skipButton = document.getElementById("skip-button");
+    if (skipButton) {
+        skipButton.remove(); // Remove skip button if it exists
+    }
+
+    // Reset progress bar
+    const progressBar = document.getElementById("progress-bar");
+    progressBar.style.width = "0%";
+
+    // Reset UI and show title screen
     document.getElementById("title-screen").style.display = "flex";
     document.getElementById("game-content").style.display = "none";
+
+    // Reset and reinitialize level 1
+    loadLevel(0);
 }
 
 function updateProgressBar() {
@@ -535,36 +560,72 @@ function fadeToBlack() {
         document.body.appendChild(fadeElement);
     }
 
+    // Style the fade-to-black element
+    fadeElement.style.position = "fixed";
+    fadeElement.style.top = "0";
+    fadeElement.style.left = "0";
+    fadeElement.style.width = "100%";
+    fadeElement.style.height = "100%";
+    fadeElement.style.backgroundColor = "black";
+    fadeElement.style.opacity = "0";
+    fadeElement.style.transition = "opacity 3s ease";
+    fadeElement.style.display = "flex";
+    fadeElement.style.justifyContent = "center";
+    fadeElement.style.alignItems = "center";
+    fadeElement.style.flexDirection = "column";
+
+    // Fade in the black background
+    setTimeout(() => {
+        fadeElement.style.opacity = "1";
+    }, 0);
+
     // Create the text container if not already added
     let fadeTextContainer = document.getElementById("fade-text-container");
     if (!fadeTextContainer) {
         fadeTextContainer = document.createElement("div");
         fadeTextContainer.id = "fade-text-container";
-
-        // Add text content
-        fadeTextContainer.innerHTML = `
-            <p id="end-message-1">Thanks for playing</p>
-            <p id="end-message-2">Now go BuildTheFuture!</p>
-            <p id="end-message-3">Made by William Peytz</p>
-        `;
+        fadeTextContainer.style.textAlign = "center";
+        fadeTextContainer.style.color = "white";
+        fadeTextContainer.style.fontSize = "2em";
+        fadeTextContainer.style.fontWeight = "bold";
+        fadeTextContainer.style.display = "flex";
+        fadeTextContainer.style.flexDirection = "column";
+        fadeTextContainer.style.alignItems = "center";
+        fadeTextContainer.style.gap = "20px";
         fadeElement.appendChild(fadeTextContainer);
     }
 
-    // Apply the fade-in effect for the background
-    fadeElement.classList.add("visible");
+    // Add text content
+    fadeTextContainer.innerHTML = `
+        <p id="end-message-1" style="opacity: 0; transition: opacity 2s;">Thanks for playing</p>
+        <p id="end-message-2" style="opacity: 0; transition: opacity 2s;">Now go BuildTheFuture</p>
+        <p id="end-message-3" style="opacity: 0; transition: opacity 2s;">Made by William Peytz</p>
+    `;
 
     // Sequentially show the messages
-    setTimeout(() => document.getElementById("end-message-1").classList.add("visible"), 1000);
-    setTimeout(() => document.getElementById("end-message-2").classList.add("visible"), 3000);
-    setTimeout(() => document.getElementById("end-message-3").classList.add("visible"), 5000);
+    setTimeout(() => {
+        document.getElementById("end-message-1").style.opacity = "1";
+    }, 2000);
+
+    setTimeout(() => {
+        document.getElementById("end-message-2").style.opacity = "1";
+    }, 4500);
+
+    setTimeout(() => {
+        document.getElementById("end-message-3").style.opacity = "1";
+    }, 7000);
 
     // Automatically return to the title screen after 10 seconds
     setTimeout(() => {
-        fadeElement.classList.remove("visible");
-        document.getElementById("title-screen").style.display = "flex";
-        document.getElementById("game-content").style.display = "none";
-        resetGame();
-    }, 7000); // 10 seconds delay
+        fadeElement.style.opacity = "0"; // Fade out the black background
+        resetGame(); // Reset the game
+        setTimeout(() => {
+            fadeElement.remove(); // Remove the fade element after fade-out transition
+            document.getElementById("title-screen").style.display = "flex";
+            document.getElementById("game-content").style.display = "none";
+            
+        }, 3000); // Wait for fade-out transition to complete
+    }, 12000); // 12 seconds delay
 }
 
 function toggleTitleMusic() {
@@ -593,22 +654,23 @@ function toggleTitleMusic() {
 }
 
 function toggleGameMusic() {
-    if (isGameMusicPlaying) {
-        if (currentLevel === 1) {
-            level1Music.pause();
-        } else if (currentLevel === 2) {
-            level2Music.pause();
-        }
-        document.getElementById("toggle-game-music").src = "assets/images/mute.png";
-    } else {
-        if (currentLevel === 1) {
-            level1Music.play().catch(error => console.error("Music playback failed:", error));
-        } else if (currentLevel === 2) {
-            level2Music.play().catch(error => console.error("Music playback failed:", error));
-        }
-        document.getElementById("toggle-game-music").src = "assets/images/unmute.png";
+    const gameMusicButton = document.getElementById("toggle-game-music");
+    const currentMusic = musicTracks[currentLevel];
+
+    if (!currentMusic) {
+        console.error("No music track found for the current level.");
+        return;
     }
-    isGameMusicPlaying = !isGameMusicPlaying;
+
+    if (isGameMusicPlaying) {
+        currentMusic.pause(); // Pause the current level's music
+        gameMusicButton.src = "assets/images/mute.png"; // Update icon to muted
+        isGameMusicPlaying = false;
+    } else {
+        currentMusic.play().catch(error => console.error("Music playback failed:", error)); // Resume music
+        gameMusicButton.src = "assets/images/unmute.png"; // Update icon to unmuted
+        isGameMusicPlaying = true;
+    }
 }
 
 // Navigation
